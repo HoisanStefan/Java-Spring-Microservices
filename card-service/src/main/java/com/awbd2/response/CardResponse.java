@@ -4,11 +4,12 @@ import com.awbd2.entity.Card;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CardResponse {
+public class CardResponse extends RepresentationModel<CardResponse> {
 
     private long cardId;
 
@@ -21,5 +22,4 @@ public class CardResponse {
         this.cardNumber = card.getCardNumber();
         this.cvv = card.getCvv();
     }
-
 }

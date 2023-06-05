@@ -1,10 +1,14 @@
 package com.awbd2.controller;
 
 import com.awbd2.request.CreateCustomerRequest;
+import com.awbd2.response.CardResponse;
 import com.awbd2.response.CustomerResponse;
 import com.awbd2.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/customer")
@@ -19,12 +23,17 @@ public class CustomerController {
 
     @PostMapping("/create")
     public CustomerResponse createCustomer(@RequestBody CreateCustomerRequest createCustomerRequest) {
-        return customerService.createCustomer(createCustomerRequest);
+        CustomerResponse customerResponse = customerService.createCustomer(createCustomerRequest);
+        customerResponse.add(linkTo(methodOn(CustomerController.class).getById(customerResponse.getCustomerId())).withSelfRel());
+
+        return customerResponse;
     }
 
     @GetMapping("/getById/{id}")
     public CustomerResponse getById(@PathVariable long id) {
-        return customerService.getById(id);
-    }
+        CustomerResponse customerResponse = customerService.getById(id);
+        customerResponse.add(linkTo(methodOn(CustomerController.class).getById(customerResponse.getCustomerId())).withSelfRel());
 
+        return customerResponse;
+    }
 }

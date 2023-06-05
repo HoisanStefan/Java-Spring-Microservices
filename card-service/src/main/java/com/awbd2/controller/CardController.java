@@ -12,6 +12,9 @@ import com.awbd2.request.CreateCardRequest;
 import com.awbd2.response.CardResponse;
 import com.awbd2.service.CardService;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping("/api/card")
 public class CardController {
@@ -25,12 +28,18 @@ public class CardController {
 
     @PostMapping("/create")
     public CardResponse createCard(@RequestBody CreateCardRequest createCardRequest) {
-        return cardService.createCard(createCardRequest);
+        CardResponse cardResponse = cardService.createCard(createCardRequest);
+        cardResponse.add(linkTo(methodOn(CardController.class).getById(cardResponse.getCardId())).withSelfRel());
+
+        return cardResponse;
     }
 
     @GetMapping("/getById/{id}")
     public CardResponse getById(@PathVariable long id) {
-        return cardService.getById(id);
+        CardResponse cardResponse = cardService.getById(id);
+        cardResponse.add(linkTo(methodOn(CardController.class).getById(cardResponse.getCardId())).withSelfRel());
+
+        return cardResponse;
     }
 
 }

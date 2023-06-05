@@ -4,11 +4,12 @@ import com.awbd2.entity.Customer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerResponse {
+public class CustomerResponse extends RepresentationModel<CustomerResponse> {
 
     private long customerId;
 
@@ -23,5 +24,4 @@ public class CustomerResponse {
         this.firstName = customer.getFirstName();
         this.lastName = customer.getLastName();
     }
-
 }
