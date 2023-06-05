@@ -15,9 +15,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableFeignClients("com.awbd2.feignclients")
 @EnableDiscoveryClient
 public class CustomerServiceApplication {
-    @Value("${card.service.url}")
-    private String cardServiceUrl;
-
     public static void main(String[] args) {
         SpringApplication.run(CustomerServiceApplication.class, args);
     }

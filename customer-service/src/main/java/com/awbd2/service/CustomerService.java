@@ -15,12 +15,12 @@ public class CustomerService {
     Logger logger = LoggerFactory.getLogger(CustomerService.class);
 
     private final CustomerRepository customerRepository;
-    private final CardFeignClient cardFeignClient;
+    private final CardServiceProxy cardServiceProxy;
 
     @Autowired
-    public CustomerService(CustomerRepository customerRepository, CardFeignClient cardFeignClient) {
+    public CustomerService(CustomerRepository customerRepository, CardServiceProxy cardServiceProxy) {
         this.customerRepository = customerRepository;
-        this.cardFeignClient = cardFeignClient;
+        this.cardServiceProxy = cardServiceProxy;
     }
 
     public CustomerResponse createCustomer(CreateCustomerRequest createCustomerRequest) {
