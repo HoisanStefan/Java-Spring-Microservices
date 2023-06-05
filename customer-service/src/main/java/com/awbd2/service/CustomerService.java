@@ -1,6 +1,7 @@
 package com.awbd2.service;
 
 import com.awbd2.entity.Customer;
+import com.awbd2.feignclients.CardFeignClient;
 import com.awbd2.repository.CustomerRepository;
 import com.awbd2.request.CreateCustomerRequest;
 import com.awbd2.response.CardResponse;
@@ -18,12 +19,12 @@ public class CustomerService {
     Logger logger = LoggerFactory.getLogger(CustomerService.class);
 
     private final CustomerRepository customerRepository;
-    private final WebClient webClient;
+    private final CardFeignClient cardFeignClient;
 
     @Autowired
-    public CustomerService(CustomerRepository customerRepository, WebClient webClient) {
+    public CustomerService(CustomerRepository customerRepository, CardFeignClient cardFeignClient) {
         this.customerRepository = customerRepository;
-        this.webClient = webClient;
+        this.cardFeignClient = cardFeignClient;
     }
 
     public CustomerResponse createCustomer(CreateCustomerRequest createCustomerRequest) {
@@ -37,7 +38,7 @@ public class CustomerService {
 
         CustomerResponse customerResponse = new CustomerResponse(customer);
 
-        customerResponse.setCardResponse(getCardById(customer.getCardId()));
+        customerResponse.setCardResponse(cardFeignClient.getById(customer.getCardId()));
 
         return customerResponse;
     }
@@ -50,17 +51,8 @@ public class CustomerService {
 
         CustomerResponse customerResponse = new CustomerResponse(customer);
 
-        customerResponse.setCardResponse(getCardById(customer.getCardId()));
+        customerResponse.setCardResponse(cardFeignClient.getById(customer.getCardId()));
 
         return customerResponse;
     }
-
-    public CardResponse getCardById(long cardId) {
-        Mono<CardResponse> cardResponse =
-                webClient.get().uri("/getById/" + cardId)
-                        .retrieve().bodyToMono(CardResponse.class);
-
-        return cardResponse.block();
-    }
-
 }
