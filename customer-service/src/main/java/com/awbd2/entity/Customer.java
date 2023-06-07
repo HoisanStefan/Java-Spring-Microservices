@@ -13,6 +13,9 @@ public class Customer {
     @Column(name = "id")
     private Long id;
 
+    @NotNull
+    @NotBlank
+    @Size(min=3, max=32)
     @Column(name = "first_name", nullable = false)
     private String firstName;
 

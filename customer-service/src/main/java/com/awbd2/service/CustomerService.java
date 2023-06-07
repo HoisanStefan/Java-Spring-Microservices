@@ -1,6 +1,7 @@
 package com.awbd2.service;
 
 import com.awbd2.entity.Customer;
+import com.awbd2.exceptions.CustomerNotFoundException;
 import com.awbd2.repository.CustomerRepository;
 import com.awbd2.request.CreateCustomerRequest;
 import com.awbd2.response.CustomerResponse;

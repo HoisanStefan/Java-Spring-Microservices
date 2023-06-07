@@ -8,6 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
+
+import java.util.Optional;
 
 @Service
 public class CardService {
@@ -30,16 +33,29 @@ public class CardService {
         cardRepository.save(card);
 
         return new CardResponse(card);
-
     }
 
     public CardResponse getById (long id) {
 
         logger.info("Inside getById " + id);
 
-        Card card = cardRepository.findById(id).get();
+        Optional<Card> optionalCard = cardRepository.findById(id);
+        if (optionalCard.isEmpty()) {
+            throw new CardNotFoundException("Card " + id + " not found!");
+        }
 
         return new CardResponse(card);
     }
 
+    public ExchangeRateResponse getExchangeRate() {
+        System.out.println(environment.getProperty("exchangeApi.apiKey"));
+        Mono<ExchangeRateResponse> addressResponse =
+                webClient.get()
+                        .uri("")
+                        .header("X-Api-Key", environment.getProperty("exchangeApi.apiKey"))  // Set your API key here
+                        .retrieve()
+                        .bodyToMono(ExchangeRateResponse.class);
+
+        return addressResponse.block();
+    }
 }
