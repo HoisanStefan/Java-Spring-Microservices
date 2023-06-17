@@ -1,6 +1,9 @@
 package com.awbd2.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Entity
@@ -20,8 +23,12 @@ public class Customer {
     private String firstName;
 
     @Column(name = "last_name", nullable = false)
+    @NotNull
+    @NotBlank
+    @Size(min=3, max=32)
     private String lastName;
 
     @Column(name = "card_id")
+    @NotNull
     private Long cardId;
 }

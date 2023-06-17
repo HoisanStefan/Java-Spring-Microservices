@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class CustomerService {
 
@@ -43,9 +45,11 @@ public class CustomerService {
     public CustomerResponse getById(long id) {
 
         logger.info("Inside getById " + id);
-
-        Customer customer = customerRepository.findById(id).get();
-
+        Optional<Customer> optionalCustomer = customerRepository.findById(id);
+        if (optionalCustomer.isEmpty()) {
+            throw new CustomerNotFoundException("Customer " + id + " not found!");
+        }
+        Customer customer = optionalCustomer.get();
         CustomerResponse customerResponse = new CustomerResponse(customer);
 
         customerResponse.setCardResponse(this.cardServiceProxy.getCardById(customer.getCardId()));
